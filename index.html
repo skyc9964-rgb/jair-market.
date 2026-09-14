@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jair Market - Catálogo Oficial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVEGACIÓN -->
+    <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="imagenes/logo.png" alt="Jair Market Logo" class="w-12 h-12 object-cover rounded-full border-2 border-amber-400 shadow-md" onerror="this.style.display='none'">
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-wide text-white">JAIR <span class="text-amber-400">MARKET</span></h1>
+                    <p class="text-xs text-slate-400">Tu Tienda Fácil y Segura</p>
+                </div>
+            </div>
+            
+            <!-- Botón del Carrito -->
+            <button onclick="toggleCart()" class="relative bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition transform active:scale-95">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="hidden sm:inline">Carrito</span>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO / BANNER PRINCIPAL DE ESQUINA A ESQUINA CON FONDO ADAPTADO -->
+    <section class="relative w-full bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-slate-800 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center min-h-[440px]">
+            
+            <!-- Izquierda: Avatar del Niño (Con fondo fundido al color de la página) -->
+            <div class="lg:col-span-3 h-72 lg:h-full relative overflow-hidden flex items-center justify-center bg-slate-950">
+                <img src="imagenes/nino-jair.jpg" alt="Jair Market - Inspiración Juvenil" 
+                     onerror="this.src='https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&auto=format&fit=crop&q=80'" 
+                     class="w-full h-full object-cover object-top opacity-85 hover:scale-105 transition duration-700 filter contrast-105 brightness-95"
+                     style="mask-image: linear-gradient(to right, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);">
+                <!-- Capa de tinte oscuro para igualar la atmósfera de la tienda -->
+                <div class="absolute inset-0 bg-slate-950/30 mix-blend-multiply"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+            </div>
+
+            <!-- Centro: Texto Comercial y Buscador -->
+            <div class="lg:col-span-6 py-10 px-6 sm:px-8 z-10 text-center">
+                <div class="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 text-amber-300 px-4 py-1 rounded-full text-xs font-semibold mb-4 shadow-sm">
+                    <i class="fa-solid fa-star text-amber-400"></i> Calidad y confianza garantizada
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4 leading-tight">
+                    Reserva tus <span class="text-amber-400">productos favoritos</span>
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base max-w-lg mx-auto mb-6">
+                    Separa cualquier artículo con el <span class="text-amber-400 font-bold">50% de adelanto</span> y cancela el saldo restante al momento de la entrega.
+                </p>
+                
+                <!-- Buscador -->
+                <div class="relative max-w-md mx-auto">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="search-input" oninput="filterProducts()" placeholder="Busca por nombre, código o palabra clave..." 
+                        class="w-full pl-11 pr-4 py-3.5 bg-slate-900/90 border border-slate-700 rounded-full text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 shadow-inner text-sm">
+                </div>
+            </div>
+
+            <!-- Derecha: Avatar del Adulto (Con fondo fundido al color de la página) -->
+            <div class="lg:col-span-3 h-72 lg:h-full relative overflow-hidden flex items-center justify-center bg-slate-950">
+                <img src="imagenes/adulto-jair.jpg" alt="Jair Market - Fundador" 
+                     onerror="this.src='https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&auto=format&fit=crop&q=80'" 
+                     class="w-full h-full object-cover object-top opacity-85 hover:scale-105 transition duration-700 filter contrast-105 brightness-95"
+                     style="mask-image: linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);">
+                <!-- Capa de tinte oscuro para igualar la atmósfera de la tienda -->
+                <div class="absolute inset-0 bg-slate-950/30 mix-blend-multiply"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-transparent"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FILTROS DE CATEGORÍA -->
+    <div class="bg-slate-950 border-b border-slate-800 py-3 sticky top-[65px] z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <button onclick="setCategory('todos')" id="cat-todos" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-amber-500 text-slate-950 transition shadow">Todos</button>
+            <button onclick="setCategory('tecnologia')" id="cat-tecnologia" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Tecnología y Gadgets</button>
+            <button onclick="setCategory('hogar')" id="cat-hogar" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Hogar y Cocina</button>
+            <button onclick="setCategory('belleza')" id="cat-belleza" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Belleza y Cuidado</button>
+            <button onclick="setCategory('fitness')" id="cat-fitness" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Fitness y Aire Libre</button>
+            <button onclick="setCategory('juguetes')" id="cat-juguetes" class="category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Juguetes y Didácticos</button>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR DE PRODUCTOS -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Inyectado por JS -->
+        </div>
+        <div id="no-results" class="hidden text-center py-16">
+            <i class="fa-solid fa-box-open text-5xl text-slate-600 mb-4"></i>
+            <h3 class="text-xl font-semibold text-slate-300">No se encontraron productos</h3>
+            <p class="text-slate-500 text-sm mt-1">Intenta con otra búsqueda o categoría.</p>
+        </div>
+    </main>
+
+    <!-- CARRITO FLOTANTE / DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex justify-end transition-opacity">
+        <div class="bg-slate-900 w-full max-w-md h-full flex flex-col border-l border-slate-800 shadow-2xl transform transition-transform">
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                <h3 class="font-bold text-lg flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-cart-shopping text-amber-400"></i> Tu Carrito de Reservas
+                </h3>
+                <button onclick="toggleCart()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-slate-800/60"></div>
+
+            <div class="p-4 bg-slate-950 border-t border-slate-800">
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between text-slate-300">
+                        <span>Total del pedido:</span>
+                        <span id="cart-total" class="font-bold text-white">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-amber-400 font-semibold bg-amber-400/10 p-2 rounded-lg border border-amber-400/20">
+                        <span>Adelanto (50% para separar):</span>
+                        <span id="cart-advance">$0.00</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 italic text-center">* El 50% restante se cancela al momento de la entrega.</p>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 transition transform active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DETALLES DEL PRODUCTO -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 bg-slate-950/80 text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-800 transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="relative h-64 sm:h-72 bg-slate-950">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-contain">
+                <span id="modal-code" class="absolute bottom-3 left-3 bg-slate-950/80 text-amber-400 text-xs px-3 py-1 rounded-full border border-slate-700 font-mono"></span>
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-xl sm:text-2xl font-bold text-white"></h3>
+                <div class="flex items-baseline gap-3">
+                    <span id="modal-price" class="text-2xl font-extrabold text-amber-400"></span>
+                    <span class="text-xs text-slate-400">Precio Oferta</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs space-y-1 text-slate-300">
+                    <p class="font-semibold text-amber-300 flex items-center gap-1">
+                        <i class="fa-solid fa-circle-info"></i> Condición de Pago:
+                    </p>
+                    <p>• <strong class="text-white">Adelanto (50%):</strong> <span id="modal-advance" class="text-amber-400 font-bold"></span> para separar y asegurar el producto.</p>
+                    <p>• <strong class="text-white">Saldo restante (50%):</strong> Se cancela al momento de la entrega.</p>
+                </div>
+                <button id="modal-add-btn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cart-plus"></i> Añadir al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500 mt-auto">
+        <p>&copy; 2026 Jair Market. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- SCRIPT CON LOS 92 PRODUCTOS -->
+    <script>
+        const products = [
+            { id: 1, name: "Bolso Maternidad Pañalera IPC", price: 18.00, advance: 9.00, code: "ZF-01", category: "hogar" },
+            { id: 2, name: "Bolsa de Maquillaje con Espejo LED", price: 16.50, advance: 8.25, code: "ZF-02", category: "belleza" },
+            { id: 3, name: "Pulidora Eléctrica Profesional", price: 23.50, advance: 11.75, code: "ZF-03", category: "hogar" },
+            { id: 4, name: "Tensiómetro de Brazo Digital", price: 16.50, advance: 8.25, code: "ZF-04", category: "belleza" },
+            { id: 5, name: "Mini Molino de Carne de Mesa", price: 19.50, advance: 9.75, code: "ZF-05", category: "hogar" },
+            { id: 6, name: "Soporte para Teléfono con Parlante Bluetooth Betta Bass", price: 8.50, advance: 4.25, code: "ZF-06", category: "tecnologia" },
+            { id: 7, name: "Dispensador de Agua Automático", price: 5.50, advance: 2.75, code: "ZF-07", category: "hogar" },
+            { id: 8, name: "Almohada para Piernas Ortopédica", price: 8.50, advance: 4.25, code: "ZF-08", category: "hogar" },
+            { id: 9, name: "Zapatera con Dos Cajones y Cortina", price: 23.40, advance: 11.70, code: "ZF-09", category: "hogar" },
+            { id: 10, name: "Mesa de Laptop Plegable", price: 15.50, advance: 7.75, code: "ZF-10", category: "tecnologia" },
+            { id: 11, name: "Luces LED en Forma de Ojos para Carro USB", price: 12.50, advance: 6.25, code: "ZF-11", category: "tecnologia" },
+            { id: 12, name: "Mini Sellador de Bolsa Recargable", price: 4.00, advance: 2.00, code: "ZF-12", category: "hogar" },
+            { id: 13, name: "Robot Pulidor de Limpieza Automático", price: 17.50, advance: 8.75, code: "ZF-13", category: "hogar" },
+            { id: 14, name: "Set Termo con Vaso y Mini Ventilador", price: 13.50, advance: 6.75, code: "ZF-14", category: "hogar" },
+            { id: 15, name: "Espejo LED con Diseño Hello Kitty", price: 20.00, advance: 10.00, code: "ZF-15", category: "belleza" },
+            { id: 16, name: "Colchón Inflable 2 Plazas sin Inflador", price: 29.50, advance: 14.75, code: "ZF-16", category: "hogar" },
+            { id: 17, name: "Parlante Portátil con Panel Solar BT", price: 12.50, advance: 6.25, code: "ZF-17", category: "tecnologia" },
+            { id: 18, name: "Plancha de Cabello Sonar Roja", price: 20.50, advance: 10.25, code: "ZF-18", category: "belleza" },
+            { id: 19, name: "Lámpara Solar Colgante Doble Foco", price: 20.50, advance: 10.25, code: "ZF-19", category: "hogar" },
+            { id: 20, name: "Secadora de Cabello 7 en 1 Pro Hair Styler", price: 47.00, advance: 23.50, code: "ZF-20", category: "belleza" },
+            { id: 21, name: "Batidor Eléctrico de Mano Multi-accesorios", price: 12.50, advance: 6.25, code: "ZF-21", category: "hogar" },
+            { id: 22, name: "Termo Varios Diseños 1200ml", price: 14.50, advance: 7.25, code: "ZF-22", category: "hogar" },
+            { id: 23, name: "Set de Cuchillos con Soporte Estético", price: 14.50, advance: 7.25, code: "ZF-23", category: "hogar" },
+            { id: 24, name: "Espejo Cosmético Plegable con Luz LED", price: 12.50, advance: 6.25, code: "ZF-24", category: "belleza" },
+            { id: 25, name: "Masajeador Corporal Relax Spin Tone", price: 13.50, advance: 6.75, code: "ZF-25", category: "belleza" },
+            { id: 26, name: "Picador de Verduras Multifunción 12 en 1", price: 12.50, advance: 6.25, code: "ZF-26", category: "hogar" },
+            { id: 27, name: "Control Universal para TV Box", price: 3.00, advance: 1.50, code: "ZF-27", category: "tecnologia" },
+            { id: 28, name: "Mini Drone de Bolsillo Musical", price: 25.00, advance: 12.50, code: "ZF-28", category: "juguetes" },
+            { id: 29, name: "Audífonos Bluetooth TWS M10", price: 10.50, advance: 5.25, code: "ZF-29", category: "tecnologia" },
+            { id: 30, name: "Kit de Herramientas de Reparación 16 en 1", price: 10.50, advance: 5.25, code: "ZF-30", category: "hogar" },
+            { id: 31, name: "Taza Colador Tamizador de Harina", price: 8.50, advance: 4.25, code: "ZF-31", category: "hogar" },
+            { id: 32, name: "Foco LED 3 en 1 de Emergencia", price: 8.50, advance: 4.25, code: "ZF-32", category: "hogar" },
+            { id: 33, name: "Letrero LED Colores Light Box", price: 10.50, advance: 5.25, code: "ZF-33", category: "tecnologia" },
+            { id: 34, name: "Parlante Bluetooth con Luces LED MS-305TM", price: 26.00, advance: 13.00, code: "ZF-34", category: "tecnologia" },
+            { id: 35, name: "Parlante Bluetooth con Luces LED Doble W", price: 26.00, advance: 13.00, code: "ZF-35", category: "tecnologia" },
+            { id: 36, name: "Cortina Retráctil para Parabrisas de Auto", price: 10.50, advance: 5.25, code: "ZF-36", category: "tecnologia" },
+            { id: 37, name: "Batidor de Mano a Pilas Espumador", price: 4.50, advance: 2.25, code: "ZF-37", category: "hogar" },
+            { id: 38, name: "Regleta Tipo Flor con Tomas y Puertos USB", price: 8.50, advance: 4.25, code: "ZF-38", category: "tecnologia" },
+            { id: 39, name: "Ejercitador de Mano y Antebrazo con Contador", price: 4.50, advance: 2.25, code: "ZF-39", category: "fitness" },
+            { id: 40, name: "Ventilador Cooler V19 para Laptop", price: 13.50, advance: 6.75, code: "ZF-40", category: "tecnologia" },
+            { id: 41, name: "Cooler para Laptop 2 Ventiladores Luz LED", price: 15.50, advance: 7.75, code: "ZF-41", category: "tecnologia" },
+            { id: 42, name: "Sombrilla para Parabrisas tipo Paraguas", price: 8.50, advance: 4.25, code: "ZF-42", category: "tecnologia" },
+            { id: 43, name: "Audífonos P9 Gamer Bluetooth", price: 9.50, advance: 4.75, code: "ZF-43", category: "tecnologia" },
+            { id: 44, name: "Audífonos P9 Plus con Diadema Acolchada", price: 10.50, advance: 5.25, code: "ZF-44", category: "tecnologia" },
+            { id: 45, name: "Alfombra Neon para Baño Set x3", price: 8.50, advance: 4.25, code: "ZF-45", category: "hogar" },
+            { id: 46, name: "Set de Alfombras para Baño Peluche x3", price: 8.50, advance: 4.25, code: "ZF-46", category: "hogar" },
+            { id: 47, name: "Set de Alfombras Marmoleadas para Baño", price: 8.50, advance: 4.25, code: "ZF-47", category: "hogar" },
+            { id: 48, name: "Plancha de Cabello Sonar 4 piezas Kit", price: 25.00, advance: 12.50, code: "ZF-48", category: "belleza" },
+            { id: 49, name: "Soporte Colgante para Cuchillos y Utensilios", price: 7.50, advance: 3.75, code: "ZF-49", category: "hogar" },
+            { id: 50, name: "Removedor de Puntos Negros Eléctrico", price: 8.50, advance: 4.25, code: "ZF-50", category: "belleza" },
+            { id: 51, name: "Altavoz Despertador Digital con Luz LED", price: 13.00, advance: 6.50, code: "ZF-51", category: "tecnologia" },
+            { id: 52, name: "Waflera Multifuncional 1200W", price: 14.00, advance: 7.00, code: "ZF-52", category: "hogar" },
+            { id: 53, name: "Mini Máquina Eléctrica Doble Multifuncional", price: 17.50, advance: 8.75, code: "ZF-53", category: "hogar" },
+            { id: 54, name: "Juego de Destornilladores de Carraca Profesional", price: 22.00, advance: 11.00, code: "ZF-54", category: "hogar" },
+            { id: 55, name: "Peine Alisador Térmico Portátil", price: 7.50, advance: 3.75, code: "ZF-55", category: "belleza" },
+            { id: 56, name: "Plancha de Vapor Portátil para Ropa", price: 19.50, advance: 9.75, code: "ZF-56", category: "hogar" },
+            { id: 57, name: "Micrófono Wireless para Celular K9", price: 9.50, advance: 4.75, code: "ZF-57", category: "tecnologia" },
+            { id: 58, name: "Rizador Recargable de Pestañas", price: 5.50, advance: 2.75, code: "ZF-58", category: "belleza" },
+            { id: 59, name: "Dispositivo Digital de Terapia con Electrodo", price: 15.50, advance: 7.75, code: "ZF-59", category: "belleza" },
+            { id: 60, name: "Calentador de Biberón Portátil Recargable", price: 19.00, advance: 9.50, code: "ZF-60", category: "hogar" },
+            { id: 61, name: "Soporte para Secadora y Organizador", price: 5.50, advance: 2.75, code: "ZF-61", category: "hogar" },
+            { id: 62, name: "Soporte Multifunción 3 en 1 Parlante y Auriculares", price: 19.50, advance: 9.75, code: "ZF-62", category: "tecnologia" },
+            { id: 63, name: "Almohadilla Térmica Menstrual Portátil", price: 14.50, advance: 7.25, code: "ZF-63", category: "belleza" },
+            { id: 64, name: "Cocina Fácil & Divertida Juguete Infantil", price: 8.50, advance: 4.25, code: "ZF-64", category: "juguetes" },
+            { id: 65, name: "Tablet Notebook Didáctica de Juguete", price: 14.00, advance: 7.00, code: "ZF-65", category: "juguetes" },
+            { id: 66, name: "Secadora de Cabello Profesional 3000W", price: 14.50, advance: 7.25, code: "ZF-66", category: "belleza" },
+            { id: 67, name: "Tensiómetro Manual con Estetoscopio", price: 15.50, advance: 7.75, code: "ZF-67", category: "belleza" },
+            { id: 68, name: "Masajeador Recargable de Manos Portátil", price: 22.50, advance: 11.25, code: "ZF-68", category: "belleza" },
+            { id: 69, name: "Afeitadora 3 en 1 Profesional Sonar", price: 12.50, advance: 6.25, code: "ZF-69", category: "belleza" },
+            { id: 70, name: "Soporte Magnético de Teléfono con Rotación 360°", price: 5.00, advance: 2.50, code: "ZF-70", category: "tecnologia" },
+            { id: 71, name: "Bloques de Madera Didáctico 30 Piezas", price: 12.50, advance: 6.25, code: "ZF-71", category: "juguetes" },
+            { id: 72, name: "Monitor Fetal Bebé", price: 21.50, advance: 10.75, code: "ZF-72", category: "belleza" },
+            { id: 73, name: "Soporte Universal para Celular Car Bracket", price: 7.50, advance: 3.75, code: "ZF-73", category: "tecnologia" },
+            { id: 74, name: "Batidora de Mano Eléctrica", price: 12.50, advance: 6.25, code: "ZF-74", category: "hogar" },
+            { id: 75, name: "Molde para Hielo con Diseño de Oso", price: 3.50, advance: 1.75, code: "ZF-75", category: "hogar" },
+            { id: 76, name: "Ligas Tubulares de Resistencia Set x5", price: 6.50, advance: 3.25, code: "ZF-76", category: "fitness" },
+            { id: 77, name: "Gafas Auriculares Inalámbricos F-06", price: 17.50, advance: 8.75, code: "ZF-77", category: "tecnologia" },
+            { id: 78, name: "Afeitadora 3 en 1 con Protección de Piel", price: 12.50, advance: 6.25, code: "ZF-78", category: "belleza" },
+            { id: 79, name: "Dispensador de Pasta y Porta Cepillos UV", price: 8.50, advance: 4.25, code: "ZF-79", category: "hogar" },
+            { id: 80, name: "Cepillo de Aire Caliente 5 en 1", price: 18.50, advance: 9.25, code: "ZF-80", category: "belleza" },
+            { id: 81, name: "Guantes de Gym para Dama", price: 5.00, advance: 2.50, code: "ZF-81", category: "fitness" },
+            { id: 82, name: "Triturador Prensa Ajo", price: 3.50, advance: 1.75, code: "ZF-82", category: "hogar" },
+            { id: 83, name: "Cortadora Recargable Portátil para Jardín", price: 28.50, advance: 14.25, code: "ZF-83", category: "hogar" },
+            { id: 84, name: "Set x3 Cuchillos de Acero Inoxidable + Tabla", price: 7.50, advance: 3.75, code: "ZF-84", category: "hogar" },
+            { id: 85, name: "Tablero de Laberinto Magnético Montessori", price: 8.50, advance: 4.25, code: "ZF-85", category: "juguetes" },
+            { id: 86, name: "Set x24 Piezas de Acero Inoxidable", price: 19.50, advance: 9.75, code: "ZF-86", category: "hogar" },
+            { id: 87, name: "Lámpara Sun 48W Grande para Uñas", price: 14.50, advance: 7.25, code: "ZF-87", category: "belleza" },
+            { id: 88, name: "Juego Rizadores de Cabello 5 en 1", price: 26.00, advance: 13.00, code: "ZF-88", category: "belleza" },
+            { id: 89, name: "Juego de Cubiertos 24 Piezas en Forma de Huevo", price: 26.00, advance: 13.00, code: "ZF-89", category: "hogar" },
+            { id: 90, name: "Set Sacacorchos de Vino en Forma de Botella", price: 9.50, advance: 4.75, code: "ZF-90", category: "hogar" },
+            { id: 91, name: "Picadora de Carne Eléctrica de 2L", price: 22.00, advance: 11.00, code: "ZF-91", category: "hogar" },
+            { id: 92, name: "Linterna LED Recargable con Herramientas", price: 19.50, advance: 9.75, code: "ZF-92", category: "tecnologia" }
+        ];
+
+        let cart = [];
+        let currentCategory = 'todos';
+
+        function renderProducts(filteredProducts = products) {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            grid.innerHTML = '';
+
+            if (filteredProducts.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-lg hover:border-amber-400/50 transition flex flex-col group";
+                card.innerHTML = `
+                    <div class="relative h-48 bg-slate-900 overflow-hidden cursor-pointer" onclick="openModal(${product.id})">
+                        <img src="imagenes/${product.id}.jpg" alt="${product.name}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60'" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        <span class="absolute top-2 left-2 bg-slate-900/90 text-amber-400 text-[10px] font-mono px-2.5 py-1 rounded-full border border-slate-700">${product.code}</span>
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="font-semibold text-white text-sm sm:text-base line-clamp-2 mb-2 cursor-pointer hover:text-amber-400 transition" onclick="openModal(${product.id})">${product.name}</h3>
+                        <div class="mt-auto space-y-3 pt-2 border-t border-slate-900">
+                            <div>
+                                <span class="text-xl font-extrabold text-amber-400">$${product.price.toFixed(2)}</span>
+                                <span class="text-[10px] text-slate-500 block">Adelanto 50%: <strong class="text-slate-300">$${product.advance.toFixed(2)}</strong></span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="openModal(${product.id})" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2 px-3 rounded-xl transition">
+                                    Ver Detalle
+                                </button>
+                                <button onclick="addToCart(${product.id})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 px-3 rounded-xl transition shadow flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-cart-plus"></i> Reservar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.className = "category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            });
+            document.getElementById(`cat-${category}`).className = "category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-amber-500 text-slate-950 transition shadow";
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchesCategory = currentCategory === 'todos' || p.category === currentCategory;
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+            renderProducts(filtered);
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCartUI();
+            document.getElementById('cart-drawer').classList.remove('hidden');
+        }
+
+        function updateCartQuantity(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const countElem = document.getElementById('cart-count');
+            const itemsContainer = document.getElementById('cart-items');
+            const totalElem = document.getElementById('cart-total');
+            const advanceElem = document.getElementById('cart-advance');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            countElem.innerText = totalItems;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-500">
+                        <i class="fa-solid fa-cart-shopping text-4xl mb-3 text-slate-600"></i>
+                        <p>Tu carrito está vacío</p>
+                    </div>
+                `;
+                totalElem.innerText = "$0.00";
+                advanceElem.innerText = "$0.00";
+                return;
+            }
+
+            itemsContainer.innerHTML = '';
+            let totalPrice = 0;
+            let totalAdvance = 0;
+
+            cart.forEach(item => {
+                totalPrice += item.price * item.quantity;
+                totalAdvance += item.advance * item.quantity;
+
+                const div = document.createElement('div');
+                div.className = "py-3 flex items-center justify-between gap-3";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="imagenes/${item.id}.jpg" class="w-12 h-12 object-cover rounded-xl bg-slate-800" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60'">
+                        <div>
+                            <h4 class="text-sm font-semibold text-white line-clamp-1">${item.name}</h4>
+                            <span class="text-xs text-amber-400 font-bold">$${item.price.toFixed(2)} c/u</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="updateCartQuantity(${item.id}, -1)" class="w-7 h-7 bg-slate-800 rounded-lg text-white hover:bg-slate-700 flex items-center justify-center">-</button>
+                        <span class="text-sm font-bold w-5 text-center">${item.quantity}</span>
+                        <button onclick="updateCartQuantity(${item.id}, 1)" class="w-7 h-7 bg-slate-800 rounded-lg text-white hover:bg-slate-700 flex items-center justify-center">+</button>
+                    </div>
+                `;
+                itemsContainer.appendChild(div);
+            });
+
+            totalElem.innerText = `$${totalPrice.toFixed(2)}`;
+            advanceElem.innerText = `$${totalAdvance.toFixed(2)}`;
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+
+            let totalPrice = 0;
+            let totalAdvance = 0;
+            let message = "¡Hola! 👋 Me gustaría separar los siguientes productos en *Jair Market*:\n\n";
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                const subAdv = item.advance * item.quantity;
+                totalPrice += subtotal;
+                totalAdvance += subAdv;
+                message += `${index + 1}. *${item.name}* (Cod: ${item.code})\n   Cantidad: ${item.quantity} | Total: $${subtotal.toFixed(2)} (Adelanto 50%: $${subAdv.toFixed(2)})\n\n`;
+            });
+
+            message += `━━━━━━━━━━━━━━━━━━\n`;
+            message += `💰 *Total General:* $${totalPrice.toFixed(2)}\n`;
+            message += `⚡ *Adelanto Total (50% para separar):* $${totalAdvance.toFixed(2)}\n`;
+            message += `📦 *Saldo restante (50%):* Se cancela contra entrega.\n\n`;
+            message += `Quedo atento/a para coordinar el pago del adelanto y la entrega. ¡Gracias!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = "593900000000"; // Reemplaza con tu número de WhatsApp
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+        }
+
+        function openModal(productId) {
+            const product = products.find(p => p.id === productId);
+            document.getElementById('modal-img').src = `imagenes/${product.id}.jpg`;
+            document.getElementById('modal-code').innerText = product.code;
+            document.getElementById('modal-title').innerText = product.name;
+            document.getElementById('modal-price').innerText = `$${product.price.toFixed(2)}`;
+            document.getElementById('modal-advance').innerText = `$${product.advance.toFixed(2)}`;
+            
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.onclick = function() {
+                addToCart(product.id);
+                closeModal();
+            };
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
